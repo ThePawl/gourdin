@@ -21,6 +21,7 @@
   #include <GL/gl.h>
 
 #elif __APPLE__
+  #define GL_SILENCE_DEPRECATION
   #include "TargetConditionals.h"
 
   #if TARGET_OS_IPHONE
