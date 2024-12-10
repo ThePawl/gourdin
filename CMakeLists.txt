@@ -8,6 +8,8 @@ set(PROJECT_NAME gourdin)
 
 project(${PROJECT_NAME})
 
+set(EXTERNAL_DIR ${CMAKE_BINARY_DIR}/external)
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING
       "Choose the type of build, options are: Debug Release
@@ -50,12 +52,12 @@ if (WIN32)
   FetchContent_Declare(
     GLEW
     URL            https://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0.zip
-    SOURCE_DIR     ${CMAKE_SOURCE_DIR}/external/glew
+    SOURCE_DIR     ${EXTERNAL_DIR}/glew
   )
   FetchContent_GetProperties(glew)
   if(NOT glew_POPULATED)
     FetchContent_Populate(glew)
-    add_subdirectory(${CMAKE_SOURCE_DIR}/external/glew/build/cmake)
+    add_subdirectory(${EXTERNAL_DIR}/glew/build/cmake)
   endif()
 endif()
 
@@ -64,26 +66,26 @@ if (NOT APPLE)
   FetchContent_Declare(
     SDL
     URL            https://github.com/libsdl-org/SDL/archive/refs/tags/release-2.28.5.zip
-    SOURCE_DIR     ${CMAKE_SOURCE_DIR}/external/SDL2
+    SOURCE_DIR     ${EXTERNAL_DIR}/SDL2
   )
 
   FetchContent_Declare(
     SDL_IMAGE
     URL            https://github.com/libsdl-org/SDL_image/archive/release-2.8.1.zip
-    SOURCE_DIR     ${CMAKE_SOURCE_DIR}/external/SDL2_image
+    SOURCE_DIR     ${EXTERNAL_DIR}/SDL2_image
   )
 endif()
 
 FetchContent_Declare(
   LIB_SDL2_PP
   URL            https://github.com/libSDL2pp/libSDL2pp/archive/0.16.0.zip
-  SOURCE_DIR     ${CMAKE_SOURCE_DIR}/external/libSDL2pp
+  SOURCE_DIR     ${EXTERNAL_DIR}/libSDL2pp
 )
 
 FetchContent_Declare(
   GLM
   URL            https://github.com/g-truc/glm/releases/download/0.9.9.7/glm-0.9.9.7.zip
-  SOURCE_DIR     ${CMAKE_SOURCE_DIR}/external/glm
+  SOURCE_DIR     ${EXTERNAL_DIR}/glm
 )
 
 # Build SDL2 and SDL2_image with CMake
@@ -100,10 +102,10 @@ if (NOT APPLE)
   # SDL2pp needs defining where the SDL2 libraries are
   set(SDL2_LIBRARY SDL2)
   set(SDL2MAIN_LIBRARY SDL2main)
-  set(SDL2_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/external/SDL2/include)
+  set(SDL2_INCLUDE_DIR ${EXTERNAL_DIR}/SDL2/include)
 
   set(SDL2_IMAGE_LIBRARY SDL2_image)
-  set(SDL2_IMAGE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/external/SDL2_image/include)
+  set(SDL2_IMAGE_INCLUDE_DIR ${EXTERNAL_DIR}/SDL2_image/include)
 
 else()
   find_package(PkgConfig REQUIRED)
@@ -140,7 +142,7 @@ if (ANDROID)
   # SDL activity
   set(SDL_ACTIVITY_FOLDER app/src/main/java/org/libsdl/app/)
   file(REMOVE_RECURSE ${CMAKE_SOURCE_DIR}/android/${SDL_ACTIVITY_FOLDER})
-  file(COPY ${CMAKE_SOURCE_DIR}/external/SDL2/android-project/${SDL_ACTIVITY_FOLDER} DESTINATION ${CMAKE_SOURCE_DIR}/android/${SDL_ACTIVITY_FOLDER})
+  file(COPY ${EXTERNAL_DIR}/SDL2/android-project/${SDL_ACTIVITY_FOLDER} DESTINATION ${CMAKE_SOURCE_DIR}/android/${SDL_ACTIVITY_FOLDER})
 
   # Assets
   file(REMOVE_RECURSE ${CMAKE_SOURCE_DIR}/android/app/src/main/assets/res)
@@ -162,8 +164,8 @@ endif()
 
 set(INCLUDE_DIRS
   ${OPENGL_INCLUDE_DIRS}
-  external/glm
-  external/glew/include
+  ${EXTERNAL_DIR}/glm
+  ${EXTERNAL_DIR}/glew/include
   ${SDL2PP_INCLUDE_DIRS}
 )
 
@@ -210,7 +212,7 @@ list (APPEND INCLUDE_DIRS "external_manual/fonts/")
 include_directories(${INCLUDE_DIRS})
 
 if (ANDROID)
-  add_library( main SHARED ${CMAKE_SOURCE_DIR}/external/SDL2/src/main/android/SDL_android_main.c ${SOURCE_FILES} )
+  add_library( main SHARED ${SOURCE_FILES} )
 
   target_link_libraries(main
     GLESv3
