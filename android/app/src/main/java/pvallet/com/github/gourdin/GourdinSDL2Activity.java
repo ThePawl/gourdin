@@ -20,7 +20,7 @@ public class GourdinSDL2Activity extends SDLActivity
         return new String[]{
                 "SDL2",
                 "SDL2_image",
-                "main"
+                "gourdin"
         };
     }
 

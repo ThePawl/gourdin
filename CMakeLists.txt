@@ -10,6 +10,20 @@ project(${PROJECT_NAME})
 
 set(EXTERNAL_DIR ${CMAKE_BINARY_DIR}/external)
 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+# Make sure all configurations output libraries in the same directory instead of in sub-directories per config
+# This allows easier linking from the Xcode iOS project
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_MINSIZEREL ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+
+if (IOS)
+  # Disable ImageIO for SDL2_image as it's not available for iOS, just OS X, and will fail at link time
+  set(SDL2IMAGE_BACKEND_IMAGEIO 0)
+endif()
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING
       "Choose the type of build, options are: Debug Release
@@ -17,7 +31,7 @@ if(NOT CMAKE_BUILD_TYPE)
       FORCE)
 endif()
 
-if (NOT ANDROID)
+if (NOT ANDROID AND NOT IOS)
   # handling warnings
   if(MSVC)
     add_definitions( -DNOMINMAX )
@@ -62,7 +76,7 @@ if (WIN32)
 endif()
 
 # We need to get the version directly from brew to load PNG files correctly
-if (NOT APPLE)
+if (IOS OR NOT APPLE)
   FetchContent_Declare(
     SDL
     URL            https://github.com/libsdl-org/SDL/archive/refs/tags/release-2.28.5.zip
@@ -89,7 +103,7 @@ FetchContent_Declare(
 )
 
 # Build SDL2 and SDL2_image with CMake
-if (NOT APPLE)
+if (IOS OR NOT APPLE)
   # Do not build the static version of SDL
   set(BUILD_SHARED_LIBS ON)
 
@@ -98,6 +112,10 @@ if (NOT APPLE)
   set(SDL2IMAGE_DEPS_SHARED OFF CACHE BOOL "Building png and zlib statically to avoid linking problems on android" FORCE)
   set(SDL2IMAGE_INSTALL OFF CACHE BOOL "" FORCE)
   set(SDL2IMAGE_SAMPLES OFF CACHE BOOL "" FORCE)
+
+  # Make sure debug libs have the same name as release ones
+  set(SDL_CMAKE_DEBUG_POSTFIX "")
+  set(SDL2IMAGE_DEBUG_POSTFIX "")
 
   # SDL2pp needs defining where the SDL2 libraries are
   set(SDL2_LIBRARY SDL2)
@@ -126,8 +144,14 @@ if (MSVC)
 endif()
 
 
-if (NOT APPLE)
+if (IOS OR NOT APPLE)
   FetchContent_MakeAvailable(SDL SDL_IMAGE)
+
+  # Making sure libraries don't generate symlinks
+  set_property(TARGET SDL2 PROPERTY VERSION)
+  set_property(TARGET SDL2 PROPERTY SOVERSION)
+  set_property(TARGET SDL2_image PROPERTY VERSION)
+  set_property(TARGET SDL2_image PROPERTY SOVERSION)
 endif()
 FetchContent_MakeAvailable(LIB_SDL2_PP)
 
@@ -211,10 +235,15 @@ list (APPEND INCLUDE_DIRS "external_manual/fonts/")
 
 include_directories(${INCLUDE_DIRS})
 
-if (ANDROID)
-  add_library( main SHARED ${SOURCE_FILES} )
+if (IOS) 
+  # Remove main.cpp as it's manually added to the XCode project directly as the entry point
+  list(REMOVE_ITEM SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/main.cpp)
+endif()
 
-  target_link_libraries(main
+if(ANDROID OR IOS)
+  add_library( ${PROJECT_NAME} SHARED ${SOURCE_FILES} )
+
+  target_link_libraries(${PROJECT_NAME}
     GLESv3
     log
     ${SDL2_LIBRARY}
@@ -223,7 +252,7 @@ if (ANDROID)
   )
 
 else()
-  add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
+  add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
   if (WIN32)
     target_link_libraries(${PROJECT_NAME}
