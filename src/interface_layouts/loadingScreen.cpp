@@ -62,4 +62,7 @@ void LoadingScreen::updateAndRender(std::string task, float progress) {
   glViewport(0, 0, (GLint) cam.getW(), (GLint) cam.getH());
 
   SDL_GL_SwapWindow(_window.Get());
+
+  // Necessary to update the loading bar on iPhone
+  SDL_PumpEvents();
 }

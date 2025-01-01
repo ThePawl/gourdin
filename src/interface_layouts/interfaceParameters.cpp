@@ -7,14 +7,14 @@
 
   #define NORMALIZATION_DPI_VALUE 537.882019
 
-  #define STAMINA_BAR_WIDTH (60.f * _androidInterfaceZoomFactor)
-  #define STAMINA_BAR_HEIGHT (8.f * _androidInterfaceZoomFactor)
+  #define STAMINA_BAR_WIDTH (60.f * _mobileInterfaceZoomFactor)
+  #define STAMINA_BAR_HEIGHT (8.f * _mobileInterfaceZoomFactor)
 
-  #define SIZE_TEXT_SMALL (30.f * _androidInterfaceZoomFactor)
-  #define SIZE_TEXT_MEDIUM (38.f * _androidInterfaceZoomFactor)
-  #define SIZE_TEXT_BIG (90.f * _androidInterfaceZoomFactor)
+  #define SIZE_TEXT_SMALL (30.f * _mobileInterfaceZoomFactor)
+  #define SIZE_TEXT_MEDIUM (38.f * _mobileInterfaceZoomFactor)
+  #define SIZE_TEXT_BIG (90.f * _mobileInterfaceZoomFactor)
 
-  #define LOADING_BAR_SIZE (1300.f * _androidInterfaceZoomFactor)
+  #define LOADING_BAR_SIZE (1300.f * _mobileInterfaceZoomFactor)
 
 #else
   #define STAMINA_BAR_WIDTH 20.f
@@ -27,7 +27,7 @@
   #define LOADING_BAR_SIZE 500.f
 #endif
 
-#define MARGINS_FACTOR (_androidInterfaceZoomFactor * 1.f/3.f)
+#define MARGINS_FACTOR (_mobileInterfaceZoomFactor * 1.f/3.f)
 
 #define COLOR_FRAME glm::vec4(0.52, 0.34, 0.138, 1)
 #define COLOR_BACKGROUND glm::vec4(205 / 256.f, 157 / 256.f, 102 / 256.f, 0.70)
@@ -35,7 +35,7 @@
 
 InterfaceParameters::InterfaceParameters():
   _screenHorizontalDPI(0),
-  _androidInterfaceZoomFactor(1) {
+  _mobileInterfaceZoomFactor(1) {
 #ifdef __ANDROID__
   // Get the screen DPI from the android application
   JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
@@ -47,7 +47,11 @@ InterfaceParameters::InterfaceParameters():
 
   env->DeleteLocalRef(activity);
   env->DeleteLocalRef(clazz);
-  _androidInterfaceZoomFactor = _screenHorizontalDPI / NORMALIZATION_DPI_VALUE;
+  _mobileInterfaceZoomFactor = _screenHorizontalDPI / NORMALIZATION_DPI_VALUE;
+#endif
+#if TARGET_OS_IPHONE
+  // Hack to zoom out the map on iPhone
+  _mobileInterfaceZoomFactor = 0.5;
 #endif
 }
 

@@ -30,7 +30,7 @@ void Game::init(LoadingScreen& loadingScreen) {
 
   setLockedView(false);
 
-#ifndef __ANDROID__
+#ifndef MOBILE
   _interface.setTextTopCenter("Best score: 0");
 #endif
 
@@ -72,7 +72,7 @@ void Game::update(int msElapsed) {
 
   logText.clear();
 
-#ifndef __ANDROID__
+#ifndef GL_ES_VERSION_3_0
   if (Clock::isGlobalTimerPaused())
     _interface.setTextCenter("PAUSED", 1);
 #endif
@@ -138,7 +138,7 @@ void Game::setLockedView(bool lockedView) {
 std::string Game::getInfoTextCommon() const {
   std::ostringstream text;
 
-#ifndef __ANDROID__
+#ifndef MOBILE
   text << "Esc: " << "Quit engine" << std::endl
        << "P: " << "Pause" << std::endl
        << "F: " << "Fullscreen/Windowed" << std::endl
@@ -151,7 +151,7 @@ std::string Game::getInfoTextCommon() const {
 std::string Game::getInfoTextLockedView() const {
   std::ostringstream text;
 
-#ifndef __ANDROID__
+#ifndef MOBILE
   text << "1: " << "God camera" << std::endl
        << "2: " << "POV camera" << std::endl;
   if (_povCamera)
@@ -183,7 +183,7 @@ std::string Game::getInfoTextLockedView() const {
 std::string Game::getInfoTextGlobalView() const {
   std::ostringstream text;
 
-#ifndef __ANDROID__
+#ifndef MOBILE
   text << "Left-Right / A-D: " << "Rotate camera" << std::endl
        << "Up-Down    / W-S: " << "Go forwards/backwards" << std::endl
        << "A/Return: " << "Select all lions" << std::endl

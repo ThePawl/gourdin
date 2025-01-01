@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.14.7 FATAL_ERROR)
 cmake_policy(VERSION 3.14.7...3.28.1)
 
-# Debug command
-# cmake .. -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles"
-
 set(PROJECT_NAME gourdin)
 
 project(${PROJECT_NAME})
@@ -31,7 +28,7 @@ if(NOT CMAKE_BUILD_TYPE)
       FORCE)
 endif()
 
-if (NOT ANDROID AND NOT IOS)
+if (NOT ANDROID)
   # handling warnings
   if(MSVC)
     add_definitions( -DNOMINMAX )
@@ -51,7 +48,11 @@ if (NOT ANDROID AND NOT IOS)
 
   # Move the built shared libraries to the executable location
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${EXECUTABLE_OUTPUT_PATH})
+endif()
 
+if (IOS)
+  find_library(OPENGLES_LIBRARY OpenGLES)
+else()
   find_package(OpenGL)
 endif()
 
@@ -230,17 +231,19 @@ foreach (_sourceFile ${EXTERNAL_SOURCE_FILES})
     list (APPEND INCLUDE_DIRS ${_dir})
 endforeach()
 
+if (IOS) 
+  # Remove main.cpp as it's manually added to the XCode project directly as the entry point
+  list(REMOVE_ITEM SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/main.cpp)
+
+  list(APPEND INCLUDE_DIRS "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/OpenGLES.framework/Headers/")
+endif()
+
 # Add font header files
 list (APPEND INCLUDE_DIRS "external_manual/fonts/")
 
 include_directories(${INCLUDE_DIRS})
 
-if (IOS) 
-  # Remove main.cpp as it's manually added to the XCode project directly as the entry point
-  list(REMOVE_ITEM SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/main.cpp)
-endif()
-
-if(ANDROID OR IOS)
+if(ANDROID)
   add_library( ${PROJECT_NAME} SHARED ${SOURCE_FILES} )
 
   target_link_libraries(${PROJECT_NAME}
@@ -250,7 +253,15 @@ if(ANDROID OR IOS)
     ${SDL2_IMAGE_LIBRARY}
     ${SDL2PP_LIBRARIES}
   )
+elseif(IOS)
+  add_library( ${PROJECT_NAME} SHARED ${SOURCE_FILES} )
 
+  target_link_libraries(${PROJECT_NAME}
+    ${OPENGLES_LIBRARY}
+    ${SDL2_LIBRARY}
+    ${SDL2_IMAGE_LIBRARY}
+    ${SDL2PP_LIBRARIES}
+  )
 else()
   add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 

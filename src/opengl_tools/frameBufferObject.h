@@ -16,10 +16,14 @@ public:
   inline const Texture* getColorBuffer() const {return &_colorBuffer;}
   inline const Texture* getDepthTexture() const {return &_depthBuffer;}
 
+  static void setDefaultFBOID(GLuint id);
+
   inline void bind() const {glBindFramebuffer(GL_FRAMEBUFFER, _fboID);}
-  static void unbind() {glBindFramebuffer(GL_FRAMEBUFFER, 0);}
+  static void unbind() { glBindFramebuffer(GL_FRAMEBUFFER, defaultFBOID); }
 
 private:
+  static GLuint defaultFBOID;
+
   GLuint _fboID;
   Texture _colorBuffer;
   Texture _depthBuffer;

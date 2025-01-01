@@ -88,7 +88,7 @@ bool Shader::compileShader(GLuint &shader, GLenum type, std::string const &sourc
 
   const GLchar* str = sourceCode.c_str();
 
-#ifdef __ANDROID__
+#ifdef GL_ES_VERSION_3_0
 	const char *sources[2] = {"#version 300 es\nprecision highp float;\nprecision mediump sampler2DArray;\n", str };
 #else
 	const char *sources[2] = { "#version 330\n", str };

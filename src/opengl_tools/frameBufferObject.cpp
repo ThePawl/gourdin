@@ -2,6 +2,8 @@
 
 #include <SDL_log.h>
 
+GLuint FrameBufferObject::defaultFBOID = -1;
+
 FrameBufferObject::FrameBufferObject() :
   _fboID(0) {
   glGenFramebuffers(1, &_fboID);
@@ -11,7 +13,13 @@ FrameBufferObject::~FrameBufferObject () {
   glDeleteFramebuffers(1, &_fboID);
 }
 
-FrameBufferObject::FrameBufferObject (FrameBufferObject&& other) noexcept:
+void FrameBufferObject::setDefaultFBOID(GLuint id) {
+  if (defaultFBOID == -1) {
+    defaultFBOID = id;
+  }
+}
+
+FrameBufferObject::FrameBufferObject(FrameBufferObject&& other) noexcept:
   _fboID(other._fboID),
   _colorBuffer(std::move(other._colorBuffer)),
   _depthBuffer(std::move(other._depthBuffer)) {}
@@ -24,12 +32,12 @@ void FrameBufferObject::init(size_t width, size_t height,
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexImage2D(GL_TEXTURE_2D, 0, colorBufferInternalFormat, width, height, 0, colorBufferFormat, colorBufferType, 0);
 
-  _depthBuffer.bind();
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height,
-            0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL);
+   _depthBuffer.bind();
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height,
+             0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL);
 
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
   Texture::unbind();
 
@@ -45,7 +53,7 @@ void FrameBufferObject::init(size_t width, size_t height,
       case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"); break;
       case GL_FRAMEBUFFER_UNSUPPORTED:                   SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "GL_FRAMEBUFFER_UNSUPPORTED"); break;
       case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE"); break;
-#ifndef __ANDROID__
+#ifndef GL_ES_VERSION_3_0
       case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER"); break;
       case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER"); break;
       case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:      SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS"); break;

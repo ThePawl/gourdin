@@ -26,7 +26,7 @@
 
   #if TARGET_OS_IPHONE
 
-    #include <OpenGLES/ES3/gl3.h>
+    #include <ES3/gl.h>
 
   #elif TARGET_OS_MAC
 

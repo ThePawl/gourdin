@@ -6,7 +6,7 @@
 #define SCROLL_SPEED_SLOW 30.f
 #define SCROLL_SPEED_FAST 250.f
 
-// For android event handling
+// For mobile event handling
 #define ROTATION_FACTOR 100.f
 #define TRANSLATION_FACTOR 2.f
 #define ZOOM_FACTOR 10.f // Be careful the zoom function is not linear
@@ -102,7 +102,6 @@ bool EventHandlerGlobalView::handleEvent(const SDL_Event& event) {
         handleKeyPressed(event);
       break;
 
-#ifdef __ANDROID__
     case SDL_FINGERMOTION:
       if (getNbFingers() == 1 && !isDuringLongClick())
         cam.translate(- event.tfinger.dx * TRANSLATION_FACTOR * cam.getZoom(),
@@ -113,7 +112,6 @@ bool EventHandlerGlobalView::handleEvent(const SDL_Event& event) {
       cam.zoom(-event.mgesture.dDist * ZOOM_FACTOR * cam.getZoom());
       cam.rotate(event.mgesture.dTheta * ROTATION_FACTOR, 0);
       break;
-#endif
   }
 
   if (event.type == SDL_USER_CLICK) {
@@ -163,7 +161,7 @@ bool EventHandlerGlobalView::handleEvent(const SDL_Event& event) {
     _game.getInterface().setRectSelect(_rectSelect);
   }
 
-#ifndef __ANDROID__
+#ifndef MOBILE
   else if (event.type == SDL_USER_DRAG_MOTION) {
     _rectSelect.z = (intptr_t) event.user.data1 - _rectSelect.x;
     _rectSelect.w = (intptr_t) event.user.data2 - _rectSelect.y;
@@ -183,7 +181,7 @@ bool EventHandlerGlobalView::handleEvent(const SDL_Event& event) {
 void EventHandlerGlobalView::onGoingEvents(int msElapsed) {
   EventHandler::onGoingEvents(msElapsed);
 
-#ifndef __ANDROID__
+#ifndef MOBILE
   Camera& cam = Camera::getInstance();
   const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
   int mousePosX, mousePosY;

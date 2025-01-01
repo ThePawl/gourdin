@@ -7,8 +7,8 @@
 #define MENU_ENTRY_HEIGHT InterfaceParameters::getInstance().sizeTextMedium()
 #define MARGINS_SIZE InterfaceParameters::getInstance().marginsSize(MENU_ENTRY_HEIGHT)
 
-#ifdef __ANDROID__
-  #define FINGER_POPUP_OFFSET (300 * InterfaceParameters::getInstance().getAndroidInterfaceZoomFactor())
+#ifdef MOBILE
+  #define FINGER_POPUP_OFFSET (300 * InterfaceParameters::getInstance().getMobileInterfaceZoomFactor())
 #endif
 
 glm::ivec2 PopupMenu::MenuEntry::_clickPos;
@@ -80,7 +80,7 @@ void PopupMenu::create(glm::ivec2 clickPos) {
   if (!_menuEntries.empty()) {
     MenuEntry::_clickPos = clickPos;
 
-#ifdef __ANDROID__
+#ifdef GL_ES_VERSION_3_0
     if (clickPos.x > Camera::getInstance().getWindowW() / 2)
       clickPos.x -= FINGER_POPUP_OFFSET;
     else

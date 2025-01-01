@@ -26,7 +26,7 @@ void Log::addFPSandCamInfo() {
   Camera& cam = Camera::getInstance();
   _text << "R: " << (int) cam.getZoom() << "\n";
 
-  #ifndef __ANDROID__
+  #ifndef MOBILE
     _text << "Theta: " << cam.getTheta() - 360 * (int) (cam.getTheta() / 360) +
                          (cam.getTheta() < 0 ? 360 : 0) << "\n"
           << "Phi: " << cam.getPhi() << std::endl;

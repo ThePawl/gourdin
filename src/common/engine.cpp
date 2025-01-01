@@ -362,7 +362,7 @@ void Engine::renderToFBO() const {
 
   // Chunk
 
-#ifndef __ANDROID__
+#ifndef GL_ES_VERSION_3_0
   if (_wireframe)
     glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 #endif
@@ -374,7 +374,7 @@ void Engine::renderToFBO() const {
     }
   }
 
-#ifndef __ANDROID__
+#ifndef GL_ES_VERSION_3_0
   if (_wireframe)
     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 #endif

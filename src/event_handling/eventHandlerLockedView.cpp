@@ -2,8 +2,8 @@
 
 #include "camera.h"
 
-#ifdef __ANDROID__
-  #define ROTATION_ANGLE_MOUSE (0.1f / interfaceParams.getAndroidInterfaceZoomFactor())
+#ifdef MOBILE
+  #define ROTATION_ANGLE_MOUSE (0.1f / interfaceParams.getMobileInterfaceZoomFactor())
 #else
   #define ROTATION_ANGLE_MOUSE 0.1f
 #endif
@@ -166,7 +166,7 @@ bool EventHandlerLockedView::handleEvent(const SDL_Event& event) {
   }
 
   else if (event.type == SDL_USER_DRAG_MOTION) {
-#ifdef __ANDROID__
+#ifdef MOBILE
     const InterfaceParameters& interfaceParams = InterfaceParameters::getInstance();
 #endif
     if (_game.getPovCamera()) {

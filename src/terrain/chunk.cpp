@@ -215,7 +215,7 @@ void Chunk::computeDistanceOptimizations() {
 	else
 		_treesNeedTwoPasses = true;
 
-#ifdef __ANDROID__
+#ifdef MOBILE
 	if (distanceToChunk > 2000)
 #else
 	if (distanceToChunk > 4000)
