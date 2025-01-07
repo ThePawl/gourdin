@@ -8,7 +8,9 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-#define MOBILE GL_ES_VERSION_3_0
+#if defined(__ANDROID__) || defined(TARGET_OS_IPHONE)
+#define MOBILE
+#endif
 
 #define RAD (M_PI / 180.f)
 
