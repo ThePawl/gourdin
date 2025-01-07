@@ -35,6 +35,10 @@ int main_internal(int argc, char* argv[]) try {
   (void) argv;
 #endif
 
+  // Setting Gaia to support Windows high DPI screens by default
+  if (!SDL_GetHint(SDL_HINT_WINDOWS_DPI_AWARENESS))
+    SDL_SetHint(SDL_HINT_WINDOWS_DPI_AWARENESS, "permonitorv2");
+
   SDL_GLContext glContext(0);
 
   SDL2pp::SDL sdl(SDL_INIT_VIDEO);

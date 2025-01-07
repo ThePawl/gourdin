@@ -23,11 +23,11 @@ public:
   glm::vec4 colorBackground() const;
 	glm::vec4 colorHighlight() const;
 
-  inline float getMobileInterfaceZoomFactor() const {return _mobileInterfaceZoomFactor;}
+  inline float getInterfaceZoomFactor() const {return _interfaceZoomFactor;}
 
 private:
 	InterfaceParameters();
 
 	float _screenHorizontalDPI;
-  float _mobileInterfaceZoomFactor;
+  float _interfaceZoomFactor;
 };

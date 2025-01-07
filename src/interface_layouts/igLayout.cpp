@@ -8,20 +8,12 @@ igLayout::igLayout():
 void igLayout::init() {
   // Minimap
   _minimapTexture.loadFromFile("res/map/map.png");
-
-#ifndef MOBILE
   _minimapRect.reset(new TexturedRectangle(&_minimapTexture, glm::ivec4(
-    0, cam.getWindowH() - _minimapTexture.getSize().y,
-    _minimapTexture.getSize()
+    cam.getWindowW() - _minimapTexture.getSize().x * 2 * interfaceParams.getInterfaceZoomFactor(),
+    cam.getWindowH() - _minimapTexture.getSize().y * 2 * interfaceParams.getInterfaceZoomFactor(),
+    _minimapTexture.getSize().x * 2 * interfaceParams.getInterfaceZoomFactor(),
+    _minimapTexture.getSize().y * 2 * interfaceParams.getInterfaceZoomFactor()
   )));
-#else
-  _minimapRect.reset(new TexturedRectangle(&_minimapTexture, glm::ivec4(
-    cam.getWindowW() - _minimapTexture.getSize().x * 2 * interfaceParams.getMobileInterfaceZoomFactor(),
-    cam.getWindowH() - _minimapTexture.getSize().y * 2 * interfaceParams.getMobileInterfaceZoomFactor(),
-    _minimapTexture.getSize().x * 2 * interfaceParams.getMobileInterfaceZoomFactor(),
-    _minimapTexture.getSize().y * 2 * interfaceParams.getMobileInterfaceZoomFactor()
-  )));
-#endif
 }
 
 void igLayout::renderEngine() const {

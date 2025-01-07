@@ -3,7 +3,7 @@
 #include "camera.h"
 
 #ifdef MOBILE
-  #define ROTATION_ANGLE_MOUSE (0.1f / interfaceParams.getMobileInterfaceZoomFactor())
+  #define ROTATION_ANGLE_MOUSE (0.1f / interfaceParams.getInterfaceZoomFactor())
 #else
   #define ROTATION_ANGLE_MOUSE 0.1f
 #endif
