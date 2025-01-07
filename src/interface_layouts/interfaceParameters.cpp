@@ -4,11 +4,11 @@
 
 #ifdef __ANDROID__
   #include <jni.h>
+
+  #define NORMALIZATION_DPI_VALUE 537.882019
 #endif
 
-#ifdef MOBILE
-  #define NORMALIZATION_DPI_VALUE 537.882019
-
+#if MOBILE
   #define STAMINA_BAR_WIDTH (60.f * _interfaceZoomFactor)
   #define STAMINA_BAR_HEIGHT (8.f * _interfaceZoomFactor)
 

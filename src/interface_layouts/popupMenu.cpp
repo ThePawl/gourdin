@@ -7,7 +7,7 @@
 #define MENU_ENTRY_HEIGHT InterfaceParameters::getInstance().sizeTextMedium()
 #define MARGINS_SIZE InterfaceParameters::getInstance().marginsSize(MENU_ENTRY_HEIGHT)
 
-#ifdef MOBILE
+#if MOBILE
   #define FINGER_POPUP_OFFSET (300 * InterfaceParameters::getInstance().getMobileInterfaceZoomFactor())
 #endif
 

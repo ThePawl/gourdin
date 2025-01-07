@@ -9,7 +9,9 @@
 #endif
 
 #if defined(__ANDROID__) || defined(TARGET_OS_IPHONE)
-#define MOBILE
+#define MOBILE 1
+#else
+#define MOBILE 0
 #endif
 
 #define RAD (M_PI / 180.f)
