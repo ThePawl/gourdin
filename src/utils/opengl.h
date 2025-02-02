@@ -26,6 +26,7 @@
 
   #if TARGET_OS_IPHONE
 
+    #define GLES_SILENCE_DEPRECATION
     #include <ES3/gl.h>
 
   #elif TARGET_OS_MAC
