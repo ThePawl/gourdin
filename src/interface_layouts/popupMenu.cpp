@@ -8,7 +8,7 @@
 #define MARGINS_SIZE InterfaceParameters::getInstance().marginsSize(MENU_ENTRY_HEIGHT)
 
 #if MOBILE
-  #define FINGER_POPUP_OFFSET (300 * InterfaceParameters::getInstance().getMobileInterfaceZoomFactor())
+  #define FINGER_POPUP_OFFSET (300 * InterfaceParameters::getInstance().getInterfaceZoomFactor())
 #endif
 
 glm::ivec2 PopupMenu::MenuEntry::_clickPos;
