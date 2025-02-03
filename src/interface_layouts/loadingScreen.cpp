@@ -51,7 +51,7 @@ void LoadingScreen::updateAndRender(std::string task, float progress) {
   ColoredRectangles progressBar(interfaceParams.colorBackground(), progressBarRect, true);
   ColoredRectangles progressBarFrame(interfaceParams.colorFrame(), progressBarFrameRect, false);
 
-  glViewport(0, 0, (GLint) cam.getWindowW(), (GLint) cam.getWindowH());
+  glViewport(0, 0, (GLint) cam.getWindowW() * cam.getHighDPIScaleX(), (GLint) cam.getWindowH() * cam.getHighDPIScaleY());
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   textCenter.bindShaderAndDraw();
@@ -59,7 +59,7 @@ void LoadingScreen::updateAndRender(std::string task, float progress) {
   textProgressBar.bindShaderAndDraw();
   progressBarFrame.bindShaderAndDraw();
 
-  glViewport(0, 0, (GLint) cam.getW(), (GLint) cam.getH());
+  glViewport(0, 0, (GLint) cam.getGameW(), (GLint) cam.getGameH());
 
   SDL_GL_SwapWindow(_window.Get());
 

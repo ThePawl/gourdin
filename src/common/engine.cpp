@@ -88,9 +88,9 @@ void Engine::init(LoadingScreen& loadingScreen) {
   _skybox.load("res/skybox/");
 
   Camera& cam = Camera::getInstance();
-  _globalFBO.init(cam.getW(), cam.getH(), GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
-  _depthInColorBufferFBO.init(cam.getW(), cam.getH(), GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
-  _depthTexturedRectangle.reset(new TexturedRectangle(_globalFBO.getDepthTexture(), cam.getScreenRect()));
+  _globalFBO.init(cam.getGameW(), cam.getGameH(), GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+  _depthInColorBufferFBO.init(cam.getGameW(), cam.getGameH(), GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+  _depthTexturedRectangle.reset(new TexturedRectangle(_globalFBO.getDepthTexture(), cam.getWindowRect()));
 
   loadingScreen.updateAndRender("Initializing content generator", 38);
 
@@ -513,10 +513,10 @@ void Engine::deleteElements(const std::vector<igMovingElement*>& elementsToDelet
 glm::vec2 Engine::get2DCoord(glm::ivec2 screenTarget) {
   Camera& cam = Camera::getInstance();
 
-  screenTarget = glm::ivec2(screenTarget.x * cam.getW() / cam.getWindowW(),
-                            screenTarget.y * cam.getH() / cam.getWindowH());
+  screenTarget = glm::ivec2(screenTarget.x * cam.getGameW() / cam.getWindowW(),
+                            screenTarget.y * cam.getGameH() / cam.getWindowH());
 
-  screenTarget.y = cam.getH() - screenTarget.y; // Inverted coordinates
+  screenTarget.y = cam.getGameH() - screenTarget.y; // Inverted coordinates
 
   _depthInColorBufferFBO.bind();
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -535,7 +535,7 @@ glm::vec2 Engine::get2DCoord(glm::ivec2 screenTarget) {
 
   glm::vec3 modelCoord = glm::unProject(glm::vec3(screenTarget.x, screenTarget.y,depth),
     glm::mat4(1.f), cam.getViewProjectionMatrix(),
-    glm::vec4(0,0, cam.getW(), cam.getH()));
+    glm::vec4(0,0, cam.getGameW(), cam.getGameH()));
 
   return glm::vec2( modelCoord.x, modelCoord.y);
 }

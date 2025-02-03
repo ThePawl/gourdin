@@ -3,7 +3,7 @@
 #include "camera.h"
 
 #if MOBILE
-  #define ROTATION_ANGLE_MOUSE (0.1f / interfaceParams.getInterfaceZoomFactor())
+  #define ROTATION_ANGLE_MOUSE 0.4f
 #else
   #define ROTATION_ANGLE_MOUSE 0.1f
 #endif
@@ -166,9 +166,6 @@ bool EventHandlerLockedView::handleEvent(const SDL_Event& event) {
   }
 
   else if (event.type == SDL_USER_DRAG_MOTION) {
-#if MOBILE
-    const InterfaceParameters& interfaceParams = InterfaceParameters::getInstance();
-#endif
     if (_game.getPovCamera()) {
       cam.setTheta(_initialDragTheta + ((intptr_t) event.user.data1 - _beginDrag.x) * ROTATION_ANGLE_MOUSE);
       cam.setPhi  (_initialDragPhi   + ((intptr_t) event.user.data2 - _beginDrag.y) * ROTATION_ANGLE_MOUSE);

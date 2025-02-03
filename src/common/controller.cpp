@@ -8,6 +8,8 @@
 #include "clock.h"
 #include "lion.h"
 
+#include <SDL.h>
+
 Controller::Controller(SDL2pp::Window& window) :
   _running(true),
   _loadingScreen(window),
@@ -20,13 +22,30 @@ Controller::Controller(SDL2pp::Window& window) :
   Camera& cam = Camera::getInstance();
   cam.setWindowSize(window.GetWidth(), window.GetHeight());
 
-#ifdef __ANDROID__
-  // We lower the game resolution to increase performance. Interface is left untouched
-  cam.resize(std::min(window.GetWidth(), 1280), std::min(window.GetHeight(), 720));
+  float highDPIScaleX, highDPIScaleY;
+
+#ifdef _WIN32
+  const float systemDefaultDPI = 96.f;
+  float dpi;
+  if (SDL_GetDisplayDPI(0, NULL, &dpi, NULL) != 0)
+  {
+    // Failed to get DPI, so just return the default value.
+    dpi = systemDefaultDPI;
+  }
+  highDPIScaleX = highDPIScaleY = dpi / systemDefaultDPI;
 #else
-  cam.resize(window.GetWidth(),window.GetHeight());
+  int drawableWidth, drawableHeight;
+  int windowWidth, windowHeight;
+
+  SDL_GetWindowSize(window.Get(), &windowWidth, &windowHeight);
+  SDL_GL_GetDrawableSize(window.Get(), &drawableWidth, &drawableHeight);
+
+  highDPIScaleX = (float)drawableWidth / windowWidth;
+  highDPIScaleY = (float)drawableHeight / windowHeight;
 #endif
 
+  cam.setHighDPIScale(highDPIScaleX, highDPIScaleY);
+  cam.resizeGameViewport(window.GetWidth() * highDPIScaleX, window.GetHeight() * highDPIScaleY);
   cam.reset();
 }
 

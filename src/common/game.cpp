@@ -106,7 +106,7 @@ void Game::render() const {
 
   _engine.renderToFBO();
 
-  glViewport(0, 0, (GLint) cam.getWindowW(), (GLint) cam.getWindowH());
+  glViewport(0, 0, (GLint) cam.getWindowW() * cam.getHighDPIScaleX(), (GLint) cam.getWindowH() * cam.getHighDPIScaleY());
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   _interface.renderEngine();
@@ -120,7 +120,7 @@ void Game::render() const {
 
   _popupMenu.bindShadersAndDraw();
 
-  glViewport(0, 0, (GLint) cam.getW(), (GLint) cam.getH());
+  glViewport(0, 0, (GLint) cam.getGameW(), (GLint) cam.getGameH());
 }
 
 void Game::setLockedView(bool lockedView) {
@@ -238,9 +238,9 @@ void Game::changeFocusInDirection(glm::vec2 direction) {
 
       // Checks whether the character is visible on the screen
       glm::ivec4 screenRect = (*ctrl)->getScreenRect();
-      if (screenRect.y > (int) cam.getH())
+      if (screenRect.y > (int) cam.getWindowH())
         continue;
-      if (screenRect.x > (int) cam.getW())
+      if (screenRect.x > (int) cam.getWindowW())
         continue;
       if (screenRect.y + screenRect.w < 0)
         continue;

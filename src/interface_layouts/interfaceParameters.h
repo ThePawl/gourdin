@@ -28,6 +28,5 @@ public:
 private:
 	InterfaceParameters();
 
-	float _screenHorizontalDPI;
-  float _interfaceZoomFactor;
+  float _interfaceZoomFactor = 1.f;
 };

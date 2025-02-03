@@ -25,9 +25,9 @@ void Camera::reset() {
   setValues(INIT_R, INIT_THETA, INIT_PHI);
 }
 
-void Camera::resize(unsigned int W, unsigned int H) {
-	_W = W;
-	_H = H;
+void Camera::resizeGameViewport(unsigned int W, unsigned int H) {
+	_gameW = W;
+	_gameH = H;
 
 	glViewport (0, 0, (GLint)W, (GLint)H);
   _aspectRatio = static_cast<float>(W)/static_cast<float>(H);

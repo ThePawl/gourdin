@@ -56,7 +56,8 @@ bool EventHandler::handleEvent(const SDL_Event& event) {
     case SDL_WINDOWEVENT:
       if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
         Camera& cam = Camera::getInstance();
-        cam.resize(event.window.data1, event.window.data2);
+        cam.resizeGameViewport(event.window.data1 * cam.getGameW() / (float)cam.getWindowW(), 
+                               event.window.data2 * cam.getGameH() / (float)cam.getWindowH());
       }
       break;
 

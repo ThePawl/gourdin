@@ -33,7 +33,7 @@ public:
   void setTextBottomCenter(const std::string& string, int msDuration = -1);
   void clearText();
 
-  inline void setEngineTexture(const Texture* tex) {_texRectEngine.reset(new TexturedRectangle(tex, Camera::getInstance().getScreenRect()));}
+  inline void setEngineTexture(const Texture* tex) {_texRectEngine.reset(new TexturedRectangle(tex, Camera::getInstance().getWindowRect()));}
   void setRectSelect(glm::ivec4 rect);
 
 private:

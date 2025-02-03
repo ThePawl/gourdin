@@ -42,12 +42,14 @@ public:
 
 	void reset();
 
-	inline glm::ivec4 getScreenRect() const {return glm::ivec4(0,0,_windowW,_windowH);}
+	inline glm::ivec4 getWindowRect() const {return glm::ivec4(0,0,getWindowW(),getWindowH());}
 
-	inline unsigned int getW() const {return _W;}
-	inline unsigned int getH() const {return _H;}
+	inline unsigned int getGameW() const {return _gameW;}
+	inline unsigned int getGameH() const {return _gameH;}
 	inline unsigned int getWindowW() const {return _windowW;}
 	inline unsigned int getWindowH() const {return _windowH;}
+	inline float getHighDPIScaleX() const {return _highDPIScaleX;}
+	inline float getHighDPIScaleY() const {return _highDPIScaleY;}
   inline glm::vec3 getPos() const {return _pos;}
 	inline glm::vec2 getProjectedPos() const {return glm::vec2(_pos.x, _pos.y);}
   inline float getTheta() const {return _theta;}
@@ -70,8 +72,9 @@ public:
 private:
 	Camera();
 
-	void resize(unsigned int W, unsigned int H);
+	void resizeGameViewport(unsigned int W, unsigned int H);
 	inline void setWindowSize(unsigned int W, unsigned int H) {_windowW = W; _windowH = H;}
+	void setHighDPIScale(float highDPIScaleX, float highDPIScaleY) {_highDPIScaleX = highDPIScaleX; _highDPIScaleY = highDPIScaleY;}
 	void apply();
 
 	void translate (float dWinX, float dWinY);
@@ -86,8 +89,9 @@ private:
   inline void setHeight(float nHeight) {_height = nHeight;}
 	inline void setAdditionalHeight(float nAddHeight) {_additionalHeight = nAddHeight;}
 
-	unsigned int _W, _H;
+	unsigned int _gameW, _gameH;
 	unsigned int _windowW, _windowH;
+	float _highDPIScaleX, _highDPIScaleY;
 
   float _fovAngle;
   float _aspectRatio;
