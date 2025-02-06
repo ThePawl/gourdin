@@ -161,7 +161,7 @@ bool EventHandlerGlobalView::handleEvent(const SDL_Event& event) {
     _game.getInterface().setRectSelect(_rectSelect);
   }
 
-#if !MOBILE
+#ifndef MOBILE
   else if (event.type == SDL_USER_DRAG_MOTION) {
     _rectSelect.z = (intptr_t) event.user.data1 - _rectSelect.x;
     _rectSelect.w = (intptr_t) event.user.data2 - _rectSelect.y;
@@ -181,7 +181,7 @@ bool EventHandlerGlobalView::handleEvent(const SDL_Event& event) {
 void EventHandlerGlobalView::onGoingEvents(int msElapsed) {
   EventHandler::onGoingEvents(msElapsed);
 
-#if !MOBILE
+#ifndef MOBILE
   Camera& cam = Camera::getInstance();
   const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
   int mousePosX, mousePosY;

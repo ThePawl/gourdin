@@ -21,6 +21,10 @@ if (IOS)
   set(SDL2IMAGE_BACKEND_IMAGEIO 0)
 endif()
 
+if (ANDROID OR IOS)
+  add_definitions( -DMOBILE )
+endif()
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING
       "Choose the type of build, options are: Debug Release

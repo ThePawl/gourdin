@@ -8,12 +8,6 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-#if defined(__ANDROID__) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
-#define MOBILE 1
-#else
-#define MOBILE 0
-#endif
-
 #define RAD (M_PI / 180.f)
 
 #define CHUNK_SIZE 1600.f
