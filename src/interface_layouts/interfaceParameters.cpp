@@ -37,7 +37,7 @@
 #define COLOR_HIGHLIGHT  glm::vec4(205 / 256.f, 157 / 256.f, 102 / 256.f, 0.90)
 
 InterfaceParameters::InterfaceParameters() {
-  #ifdef __ANDROID__
+#ifdef __ANDROID__
   // Get the screen DPI from the android application
   JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
   jobject activity = (jobject)SDL_AndroidGetActivity();
@@ -49,7 +49,16 @@ InterfaceParameters::InterfaceParameters() {
   env->DeleteLocalRef(activity);
   env->DeleteLocalRef(clazz);
   _interfaceZoomFactor = screenHorizontalDPI / NORMALIZATION_DPI_VALUE;
-  #endif
+#elif defined(_WIN32)
+  const float systemDefaultDPI = 96.f;
+  float dpi;
+  if (SDL_GetDisplayDPI(0, NULL, &dpi, NULL) != 0)
+  {
+    // Failed to get DPI, so just return the default value.
+    dpi = systemDefaultDPI;
+  }
+  _interfaceZoomFactor = dpi / systemDefaultDPI;
+#endif
 }
 
 float InterfaceParameters::staminaBarWidth() const {return STAMINA_BAR_WIDTH;}

@@ -23,17 +23,6 @@ Controller::Controller(SDL2pp::Window& window) :
   cam.setWindowSize(window.GetWidth(), window.GetHeight());
 
   float highDPIScaleX, highDPIScaleY;
-
-#ifdef _WIN32
-  const float systemDefaultDPI = 96.f;
-  float dpi;
-  if (SDL_GetDisplayDPI(0, NULL, &dpi, NULL) != 0)
-  {
-    // Failed to get DPI, so just return the default value.
-    dpi = systemDefaultDPI;
-  }
-  highDPIScaleX = highDPIScaleY = dpi / systemDefaultDPI;
-#else
   int drawableWidth, drawableHeight;
   int windowWidth, windowHeight;
 
@@ -42,7 +31,6 @@ Controller::Controller(SDL2pp::Window& window) :
 
   highDPIScaleX = (float)drawableWidth / windowWidth;
   highDPIScaleY = (float)drawableHeight / windowHeight;
-#endif
 
   cam.setHighDPIScale(highDPIScaleX, highDPIScaleY);
   cam.resizeGameViewport(window.GetWidth() * highDPIScaleX, window.GetHeight() * highDPIScaleY);
