@@ -84,13 +84,13 @@ endif()
 if (IOS OR NOT APPLE)
   FetchContent_Declare(
     SDL
-    URL            https://github.com/libsdl-org/SDL/archive/refs/tags/release-2.28.5.zip
+    URL            https://github.com/libsdl-org/SDL/archive/refs/tags/release-2.32.0.zip
     SOURCE_DIR     ${EXTERNAL_DIR}/SDL2
   )
 
   FetchContent_Declare(
     SDL_IMAGE
-    URL            https://github.com/libsdl-org/SDL_image/archive/release-2.8.1.zip
+    URL            https://github.com/libsdl-org/SDL_image/archive/release-2.8.5.zip
     SOURCE_DIR     ${EXTERNAL_DIR}/SDL2_image
   )
 endif()
@@ -117,6 +117,7 @@ if (IOS OR NOT APPLE)
   set(SDL2IMAGE_DEPS_SHARED OFF CACHE BOOL "Building png and zlib statically to avoid linking problems on android" FORCE)
   set(SDL2IMAGE_INSTALL OFF CACHE BOOL "" FORCE)
   set(SDL2IMAGE_SAMPLES OFF CACHE BOOL "" FORCE)
+  set(SDL2IMAGE_VENDORED OFF CACHE BOOL "" FORCE)
 
   # Make sure debug libs have the same name as release ones
   set(SDL_CMAKE_DEBUG_POSTFIX "")
