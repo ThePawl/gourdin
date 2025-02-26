@@ -8,7 +8,7 @@
   #define NORMALIZATION_DPI_VALUE 537.882019
 #endif
 
-#ifdef MOBILE
+#ifdef __ANDROID__
   #define STAMINA_BAR_WIDTH (60.f * _interfaceZoomFactor)
   #define STAMINA_BAR_HEIGHT (2.f * _interfaceZoomFactor)
 
