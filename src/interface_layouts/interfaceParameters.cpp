@@ -2,15 +2,17 @@
 
 #include <SDL.h>
 
+#ifdef MOBILE
+  #define STAMINA_BAR_HEIGHT (3.f * _interfaceZoomFactor)
+#else
+  #define STAMINA_BAR_HEIGHT (4.f * _interfaceZoomFactor)
+#endif
+
 #ifdef __ANDROID__
   #include <jni.h>
 
   #define NORMALIZATION_DPI_VALUE 537.882019
-#endif
-
-#ifdef MOBILE
   #define STAMINA_BAR_WIDTH (60.f * _interfaceZoomFactor)
-  #define STAMINA_BAR_HEIGHT (2.f * _interfaceZoomFactor)
 
   #define SIZE_TEXT_SMALL (30.f * _interfaceZoomFactor)
   #define SIZE_TEXT_MEDIUM (38.f * _interfaceZoomFactor)
@@ -20,7 +22,6 @@
 
 #else
   #define STAMINA_BAR_WIDTH (20.f * _interfaceZoomFactor)
-  #define STAMINA_BAR_HEIGHT (4.f * _interfaceZoomFactor)
 
   #define SIZE_TEXT_SMALL (10 * _interfaceZoomFactor)
   #define SIZE_TEXT_MEDIUM (14 * _interfaceZoomFactor)
